@@ -12,6 +12,8 @@ spec:
       labels:
         app: space-website
     spec:
+      imagePullSecrets:
+      - name: regcred
       containers:
       - name: space-website-container
         image: registry/space-website:latest
