@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: space-website
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: space-website
+  template:
+    metadata:
+      labels:
+        app: space-website
+    spec:
+      containers:
+      - name: space-website-container
+        image: registry/space-website:latest
+        ports:
+        - containerPort: 80
