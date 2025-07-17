@@ -109,5 +109,23 @@ pipeline {
                 }
             }
         }
+
+        stage('Approve for AWS') {
+            steps {
+                timeout(time: 30, unit: 'MINUTES') {
+                    input message: 'Deployment ke Cloudraya berhasil. Lanjutkan ke AWS?', ok: 'Ya, Lanjutkan'
+                }
+            }
+        }
+
+        stage('Deploy to AWS') {
+            steps {
+                container('kubectl') {
+                    script {
+                        deployToEnv('AWS', 'kubeconfig-aws', 'demo', env.FULL_IMAGE_NAME)
+                    }
+                }
+            }
+        }
     }
 }
