@@ -3,7 +3,7 @@ def deployToEnv(String environmentName, String kubeconfigId, String namespace, S
     withKubeConfig(credentialsId: kubeconfigId) {
         sh """
         # Define a ConfigMap to hold the cluster name for app usage
-        cat <<EOF > configmap.yaml
+        def configMapContent = """
         apiVersion: v1
         kind: ConfigMap
         metadata:
@@ -11,7 +11,9 @@ def deployToEnv(String environmentName, String kubeconfigId, String namespace, S
           namespace: ${namespace}
         data:
           cluster-info.txt: "Served from: ${environmentName}"
-        EOF
+        """
+
+        writeFile(file: 'configmap.yaml', text: configMapContent)
 
         kubectl apply -f configmap.yaml
 
@@ -27,23 +29,23 @@ pipeline {
         kubernetes {
             cloud 'kubernetes'
             yaml """
-apiVersion: v1
-kind: Pod
-metadata:
-  labels:
-    jenkins-agent: kaniko-builder
-spec:
-  containers:
-  - name: kaniko
-    image: gcr.io/kaniko-project/executor:debug
-    command: ['sleep']
-    args: ['infinity']
-    tty: true
-  - name: kubectl
-    image: lachlanevenson/k8s-kubectl:latest
-    command: ['sleep']
-    args: ['infinity']
-"""
+            apiVersion: v1
+            kind: Pod
+            metadata:
+              labels:
+                jenkins-agent: kaniko-builder
+            spec:
+              containers:
+              - name: kaniko
+                image: gcr.io/kaniko-project/executor:debug
+                command: ['sleep']
+                args: ['infinity']
+                tty: true
+              - name: kubectl
+                image: lachlanevenson/k8s-kubectl:latest
+                command: ['sleep']
+                args: ['infinity']
+            """
         }
     }
 
