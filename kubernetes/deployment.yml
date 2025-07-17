@@ -19,3 +19,11 @@ spec:
         image: registry/space-website:latest
         ports:
         - containerPort: 80
+        volumeMounts:
+        - name: cluster-info-volume
+          mountPath: /usr/share/nginx/html/cluster-info.txt
+          subPath: cluster-info.txt
+      volumes:
+      - name: cluster-info-volume
+        configMap:
+          name: cluster-info-cm
