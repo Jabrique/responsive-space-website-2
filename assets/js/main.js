@@ -98,6 +98,17 @@ const sr = ScrollReveal({
    // reset: true, // Animations repeat
 })
 
+/*=============== add cluster-info on footer ===============*/
+fetch('/cluster-info.txt')
+        .then(response => response.text())
+        .then(text => {
+            document.getElementsByClassName('served-from-info').textContent = text;
+        })
+        .catch(error => {
+            document.getElementsByClassName('served-from-info').textContent = 'Served from: Unknown';
+            console.error('Error fetching cluster info:', error);
+        });
+
 sr.reveal(`.home__data, .travel__swiper, .contact__container`)
 sr.reveal(`.home__img`, {origin: 'bottom'})
 sr.reveal(`.home__ovni`, {delay: 800})
