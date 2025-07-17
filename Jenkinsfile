@@ -2,6 +2,7 @@ def deployToEnv(String environmentName, String kubeconfigId, String namespace, S
     echo "🚀 Deploying to ${environmentName} cluster..."
     withKubeConfig(credentialsId: kubeconfigId) {
         sh """
+        sed -i 's|Served from: .*|Served from: ${environmentName}|g' index.html
         sed -i 's|image: .*|image: ${fullImageName}|g' kubernetes/deployment.yml
         kubectl apply -f kubernetes/deployment.yml -n ${namespace} --v=8
         """
