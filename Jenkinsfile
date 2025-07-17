@@ -34,12 +34,6 @@ spec:
     }
 
     stages {
-        stage('Checkout Code') {
-            steps {
-                git branch: 'main', url: 'https://github.com/Jabrique/responsive-space-website-2.git'
-            }
-        }
-
         stage('Build & Push Image') {
             steps {
                 container('kaniko') {
