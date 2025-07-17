@@ -1,8 +1,6 @@
 def deployToEnv(String environmentName, String kubeconfigId, String namespace, String fullImageName) {
     echo "🚀 Deploying to ${environmentName} cluster..."
     withKubeConfig(credentialsId: kubeconfigId) {
-        sh """
-        # Define a ConfigMap to hold the cluster name for app usage
         def configMapContent = """
         apiVersion: v1
         kind: ConfigMap
@@ -12,11 +10,12 @@ def deployToEnv(String environmentName, String kubeconfigId, String namespace, S
         data:
           cluster-info.txt: "Served from: ${environmentName}"
         """
-
+        
         writeFile(file: 'configmap.yaml', text: configMapContent)
 
+        sh """
         kubectl apply -f configmap.yaml
-
+        
         sed -i 's|image: .*|image: ${fullImageName}|g' kubernetes/deployment.yml
         kubectl apply -f kubernetes/deployment.yml -n ${namespace}
         kubectl rollout status deployment/space-website -n ${namespace} --timeout=180s
