@@ -2,7 +2,7 @@ def deployToEnv(String environmentName, String kubeconfigId, String namespace, S
     echo "🚀 Deploying to ${environmentName} cluster..."
     withKubeConfig(credentialsId: kubeconfigId) {
         sh """
-        #Define a ConfigMap to hold the cluster name for app usage
+        # Define a ConfigMap to hold the cluster name for app usage
         cat <<EOF > configmap.yaml
         apiVersion: v1
         kind: ConfigMap
