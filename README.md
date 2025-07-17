@@ -1,6 +1,4 @@
 # Responsive Space Website
-## [Watch it on youtube](https://youtu.be/B8aTNKgbwE0)
-### Responsive Space Website
 
 - Responsive Space Website Design Using HTML CSS And JavaScript
 - Contains animations when scrolling.
