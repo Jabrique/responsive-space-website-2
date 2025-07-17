@@ -102,10 +102,16 @@ const sr = ScrollReveal({
 fetch('/cluster-info.txt')
         .then(response => response.text())
         .then(text => {
-            document.getElementsByClassName('served-from-info').textContent = text;
+	    const targetElement = document.querySelector('.served-from-info');
+	    if (targetElement) {
+	        targetElement.textContent = text;
+	    }
         })
         .catch(error => {
-            document.getElementsByClassName('served-from-info').textContent = 'Served from: Unknown';
+            const targetElement = document.querySelector('.served-from-info');
+            if (targetElement) {
+                targetElement.textContent = 'Served from: Unknown';
+            }
             console.error('Error fetching cluster info:', error);
         });
 
