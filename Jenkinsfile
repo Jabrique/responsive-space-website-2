@@ -61,18 +61,13 @@ pipeline {
 
                         withCredentials([usernamePassword(credentialsId: 'cloudraya-container-registry', usernameVariable: 'REG_USER', passwordVariable: 'REG_PASS')]) {
                             echo "🔐 Creating Kaniko config.json..."
-                            sh """
-                            AUTH=\$(echo -n "${REG_USER}:${REG_PASS}" | base64)
-                            cat <<EOF > /kaniko/.docker/config.json
-                            {
-                              "auths": {
-                                "${dockerRegistry}": {
-                                  "auth": "\$AUTH"
-                                }
-                              }
+                            withEnv(["DOCKER_REGISTRY_HOST=${dockerRegistry}"]) {
+                                sh '''
+                                AUTH=$(echo -n "$REG_USER:$REG_PASS" | base64)
+                                
+                                echo '{ "auths": { "'$DOCKER_REGISTRY_HOST'": { "auth": "'$AUTH'" } } }' > /kaniko/.docker/config.json
+                                '''
                             }
-                            EOF
-                            """
                         }
                         
                         echo "🔨 Building and pushing image: ${fullImageName}"
